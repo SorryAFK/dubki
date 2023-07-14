@@ -6,33 +6,30 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "comments")
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+@Table(name = "refresh_tokens")
+public class RefreshToken {
   @Id
+  @Column(name = "id",unique = true)
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
-  @ManyToOne(targetEntity = User.class)
+  private long id;
+  @OneToOne(targetEntity = User.class)
   @JoinColumn(name = "user_id", referencedColumnName = "id")
-  private User author;
-  @ManyToOne(targetEntity = User.class)
-  @JoinColumn(name = "post_id", referencedColumnName = "id")
-  private Post post;
-  @Column(name = "comment")
-  private String comment;
+  private User ownerOfToken;
 
-  @Column(name = "time", nullable = false)
-  private LocalDateTime timestampWhenWasCommentCreated;
+  @Column(name = "refresh_tokens")
+  private String tokenForRefresh;
 }

@@ -6,33 +6,33 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
-@Table(name = "comments")
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Comment {
+@Entity
+@Table(name = "email_codes")
+public class VerificationCode {
   @Id
+  @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  @ManyToOne(targetEntity = User.class)
-  @JoinColumn(name = "user_id", referencedColumnName = "id")
-  private User author;
-  @ManyToOne(targetEntity = User.class)
-  @JoinColumn(name = "post_id", referencedColumnName = "id")
-  private Post post;
-  @Column(name = "comment")
-  private String comment;
 
-  @Column(name = "time", nullable = false)
-  private LocalDateTime timestampWhenWasCommentCreated;
+  @OneToOne
+  @MapsId
+  @JoinColumn(referencedColumnName = "id", name = "code_owner_id")
+  private User userId;
+
+  @Column(name = "code", nullable = false)
+  private String emailCode;
 }
